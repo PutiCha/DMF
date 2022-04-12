@@ -1,0 +1,20 @@
+﻿<Window x:Class="DMF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DMF"
+        mc:Ignorable="d"
+        Title="DMF Panel" Height="310" Width="400"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,0,-6">
+        <Rectangle HorizontalAlignment="Center" Height="63" Margin="0,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="350"/>
+        <TextBox x:Name="postPath" IsReadOnly="True" HorizontalAlignment="Left" Margin="25,47,0,0" TextWrapping="Wrap" Text="No selected file..." VerticalAlignment="Top" Width="245" Height="20"/>
+        <Button x:Name="postGo" Content="Post" HorizontalAlignment="Left" Margin="333,47,0,0" VerticalAlignment="Top" Click="postGo_Click"/>
+        <Button x:Name="postBrowse" Content="Browse" HorizontalAlignment="Left" Margin="281,47,0,0" VerticalAlignment="Top" Click="postBrowse_Click"/>
+        <Label Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Black" Margin="0,-1,0,0"/>
+        <TextBox x:Name="resultBox" IsReadOnly="True" HorizontalAlignment="Center" Margin="0,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Height="118" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="No pending response..."/>
+        <Label Content="Response" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Black" Margin="0,107,0,0"/>
+    </Grid>
+</Window>
