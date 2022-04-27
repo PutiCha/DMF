@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-// using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,57 +22,52 @@ namespace DMF
         public string sasUrl = "?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2062-12-31T05:00:00Z&st=2022-04-10T05:00:00Z&spr=https,http&sig=YnhMmBTb%2BiYAUuv5TWQyUqX4mfvHPsLAn8E90ps3BVE%3D";
         public string subscriptId = "7c3cdf04-4cf4-4531-baec-826c84722f9f";
         public string tenantId = "3e85c516-2459-4d8d-9d02-50f74400bfd2";
+        public string authToken = "";
 
-        /* ---------------------------------------------------------------------------------------------------------
-           public string authToken = "";
+        public class tokenApi
+        {
+            public string token_type { get; set; }
+            public string expires_in { get; set; }
+            public string ext_expires_in { get; set; }
+            public string expires_on { get; set; }
+            public string not_before { get; set; }
+            public string resource { get; set; }
+            public string access_token { get; set; }
+        }
 
-           public class tokenApi
-           {
-               public string token_type { get; set; }
-               public string expires_in { get; set; }
-               public string ext_expires_in { get; set; }
-               public string expires_on { get; set; }
-               public string not_before { get; set; }
-               public string resource { get; set; }
-               public string access_token { get; set; }
-           }
+        public async Task getToken()
+        {
+            var dict1 = new Dictionary<string, string>();
+            dict1.Add("grant_type", grantType);
+            dict1.Add("client_id", clientId);
+            dict1.Add("client_secret", clientSecret);
+            dict1.Add("resource", resourceUrl);
 
-           public async Task getToken()
-           {
-               var dict1 = new Dictionary<string, string>();
-                   dict1.Add("grant_type", grantType);
-                   dict1.Add("client_id", clientId);
-                   dict1.Add("client_secret", clientSecret);
-                   dict1.Add("resource", resourceUrl);
+            HttpClient client1 = new HttpClient();
+            HttpRequestMessage req1 = new HttpRequestMessage();
+            req1.Content = new FormUrlEncodedContent(dict1);
+            req1.Method = HttpMethod.Post;
+            req1.RequestUri = new Uri($"https://login.microsoftonline.com/{tenantId}/oauth2/token");
 
-               HttpClient client1 = new HttpClient();
-               HttpRequestMessage req1 = new HttpRequestMessage();
-               req1.Content = new FormUrlEncodedContent(dict1);
-               req1.Method = HttpMethod.Post;
-               req1.RequestUri = new Uri($"https://login.microsoftonline.com/{tenantId}/oauth2/token");
-
-               HttpResponseMessage res1 = await client1.SendAsync(req1);
-               var statC1 = (int)res1.StatusCode;
-               var statT1 = res1.StatusCode;
-               var txt1 = await res1.Content.ReadAsStringAsync();
-               dynamic obj1 = JsonConvert.DeserializeObject<tokenApi>(txt1);
-               authToken = obj1.access_token;
-           }
-        --------------------------------------------------------------------------------------------------------- */
+            HttpResponseMessage res1 = await client1.SendAsync(req1);
+            var txt1 = await res1.Content.ReadAsStringAsync();
+            dynamic obj1 = JsonConvert.DeserializeObject<tokenApi>(txt1);
+            authToken = obj1.access_token;
+        }
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        public void postBrowse_Click(object sender, RoutedEventArgs e)
+        public async void postBrowse_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofdP = new OpenFileDialog();
             ofdP.Multiselect = true;
             ofdP.Filter = "csv files(*.csv)|*.csv|json files(*.json)|*.json|txt files(*.txt)|*.txt|xlsx files(*.xlsx)|*.xlsx|xml files(*.xml)|*.xml";
             Nullable<bool> check = ofdP.ShowDialog();
 
-            if(check == true)
+            if (check == true)
             {
                 postPath.Text = ofdP.FileName;
                 fileTitle = Path.GetFileName(ofdP.FileName);
@@ -83,29 +78,42 @@ namespace DMF
         public async Task postFile()
         {
             var dict2 = new Dictionary<string, string>();
-                        dict2.Add("", fileContent);
+            dict2.Add("", fileContent);
 
-            HttpClient client2 = new HttpClient();
             HttpRequestMessage req2 = new HttpRequestMessage();
             req2.Content = new StringContent(fileContent);
             req2.Headers.Add("x-ms-blob-type", "BlockBlob");
             req2.Method = HttpMethod.Put;
             req2.RequestUri = new Uri($"https://insbrokercloudstoragedev.blob.core.windows.net/map-input/{fileTitle}{sasUrl}");
+        }
 
-            HttpResponseMessage res2 = await client2.SendAsync(req2);
-            var statC2 = (int)res2.StatusCode;
-            var statT2 = res2.StatusCode;
-            var txt2 = await res2.Content.ReadAsStringAsync();
-            resultBox.Text = "{Status: " + statC2 + ", " + statT2 + "}\n" + txt2;
+        public async Task getFile()
+        {
+            var dict3 = new Dictionary<string, string>();
+            dict3.Add("", fileContent);
+
+            HttpClient client3 = new HttpClient();
+            HttpRequestMessage req3 = new HttpRequestMessage();
+            req3.Content = new StringContent(fileContent);
+            req3.Headers.Add("x-ms-blob-type", "BlockBlob");
+            req3.Method = HttpMethod.Get;
+            req3.RequestUri = new Uri($"https://insbrokercloudstoragedev.blob.core.windows.net/map-input/{fileTitle}{sasUrl}");
+
+            HttpResponseMessage res3 = await client3.SendAsync(req3);
+            var statC3 = (int)res3.StatusCode;
+            var txt3 = await res3.Content.ReadAsStringAsync();
+            statusCode.Content = "Status: " + statC3;
+            resultBox.Text = txt3;
         }
 
         public async Task allApis()
         {
-            // await getToken();
+            await getToken();
             await postFile();
+            await getFile();
         }
 
-        public void postGo_Click(object sender, RoutedEventArgs e)
+        public async void postGo_Click(object sender, RoutedEventArgs e)
         {
             if (postPath.Text == "No selected file...")
             {
@@ -114,7 +122,7 @@ namespace DMF
 
             else
             {
-                allApis();
+                await allApis();
             }
         }
     }
