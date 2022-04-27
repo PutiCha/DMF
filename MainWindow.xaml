@@ -13,9 +13,9 @@
         <TextBox x:Name="postPath" IsReadOnly="True" HorizontalAlignment="Left" Margin="25,47,0,0" TextWrapping="Wrap" Text="No selected file..." VerticalAlignment="Top" Width="245" Height="20"/>
         <Button x:Name="postGo" Content="Post" HorizontalAlignment="Left" Margin="333,47,0,0" VerticalAlignment="Top" Click="postGo_Click"/>
         <Button x:Name="postBrowse" Content="Browse" HorizontalAlignment="Left" Margin="281,47,0,0" VerticalAlignment="Top" Click="postBrowse_Click"/>
-        <Label Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red" Margin="0,-1,0,0"/>
+        <Label Content="&lt;Upload File&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red" Margin="0,-1,0,0"/>
         <TextBox x:Name="resultBox" IsReadOnly="True" HorizontalAlignment="Center" Margin="0,158,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336" Height="89" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="No pending response..." Foreground="Black" BorderBrush="Black"/>
-        <Label Content="Response" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Lime" Margin="0,107,0,0"/>
+        <Label Content="&lt;Response&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Lime" Margin="0,107,0,0"/>
         <Label x:Name="statusCode" Content="Status: 000" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Foreground="Blue" Width="68"/>
         <Rectangle HorizontalAlignment="Center" Height="118" Margin="0,136,0,0" Stroke="Lime" VerticalAlignment="Top" Width="350"/>
     </Grid>
